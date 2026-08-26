@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
+  NEXT_PUBLIC_SITE_URL: z.string().url().default("https://crashflyy.com"),
   NEXT_PUBLIC_SITE_NAME: z.string().min(1).default("CrashX"),
   NEXT_PUBLIC_SITE_TAGLINE: z
     .string()
@@ -18,10 +18,10 @@ const envSchema = z.object({
   NEXT_PUBLIC_API_URL: z
     .string()
     .url()
-    .default("http://127.0.0.1"),
+    .default("https://dashboard.crashflyy.com"),
   NEXT_PUBLIC_TENANT_SLUG: z.string().min(1).default("crashx"),
   /** Public Soketi/Pusher key only — never put the app secret in Next.js. */
-  NEXT_PUBLIC_PUSHER_APP_KEY: z.string().optional(),
+  NEXT_PUBLIC_PUSHER_APP_KEY: z.string().optional().default("local-crashx-key"),
   /** When false, Echo is never instantiated (no WS attempts — use if Soketi is not running). */
   NEXT_PUBLIC_REALTIME_ENABLED: z
     .string()
@@ -37,10 +37,10 @@ const envSchema = z.object({
       );
     }),
   NEXT_PUBLIC_PUSHER_APP_CLUSTER: z.string().default("mt1"),
-  NEXT_PUBLIC_WS_HOST: z.string().default("127.0.0.1"),
-  NEXT_PUBLIC_WS_PORT: z.coerce.number().default(6001),
-  NEXT_PUBLIC_WSS_PORT: z.coerce.number().default(6001),
-  NEXT_PUBLIC_PUSHER_SCHEME: z.enum(["http", "https"]).default("http"),
+  NEXT_PUBLIC_WS_HOST: z.string().default("crashflyy.com"),
+  NEXT_PUBLIC_WS_PORT: z.coerce.number().default(443),
+  NEXT_PUBLIC_WSS_PORT: z.coerce.number().default(443),
+  NEXT_PUBLIC_PUSHER_SCHEME: z.enum(["http", "https"]).default("https"),
   /** When omitted, signed-in players use Laravel wallet staking (production default). Set false for frontend-only practice. */
   NEXT_PUBLIC_CRASH_REAL_MONEY: z
     .string()
