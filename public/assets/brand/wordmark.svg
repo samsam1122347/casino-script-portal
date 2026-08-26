@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="42" viewBox="0 0 180 42" fill="none" role="img" aria-label="CrashX">
+  <defs>
+    <linearGradient id="wm-fill" x1="0" y1="0" x2="180" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.55" stop-color="#F2F4FF"/>
+      <stop offset="1" stop-color="#FFE9A8"/>
+    </linearGradient>
+    <linearGradient id="wm-gold" x1="0" y1="0" x2="180" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9A7117" stop-opacity="0"/>
+      <stop offset="0.18" stop-color="#D4AF37"/>
+      <stop offset="0.5" stop-color="#FFE9A8"/>
+      <stop offset="0.82" stop-color="#D4AF37"/>
+      <stop offset="1" stop-color="#9A7117" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wm-spark" x1="0" y1="0" x2="0" y2="14" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFE9A8"/>
+      <stop offset="1" stop-color="#D4AF37"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#wm-fill)" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+    <!-- Each glyph is hand-built so kerning and letterforms feel custom & confident. -->
+    <!-- L -->
+    <path d="M3 5 H13 V27 H26 V35 H3 Z"/>
+    <!-- R -->
+    <path d="M30 5 H46 C53 5 57 10 57 16 C57 20.5 54.5 24 50 25.5 L58 35 H47 L40.5 26.5 H40 V35 H30 Z M40 13 V19 H45 C46.5 19 47.5 17.7 47.5 16 C47.5 14.3 46.5 13 45 13 Z"/>
+    <!-- W -->
+    <path d="M61 5 H71 L74.5 23 L78.5 5 H86.5 L90.5 23 L94 5 H104 L96 35 H86 L82.5 19 L79 35 H69 Z"/>
+    <!-- I -->
+    <path d="M108 5 H118 V35 H108 Z"/>
+    <!-- N -->
+    <path d="M123 5 H132.5 L143 21.5 V5 H152.5 V35 H143 L132.5 18.5 V35 H123 Z"/>
+  </g>
+  <!-- Gold underline rule with falloff -->
+  <rect x="3" y="38.6" width="150" height="1.2" fill="url(#wm-gold)" rx="0.6"/>
+  <!-- Apex spark above the I dot zone -->
+  <g transform="translate(160 9)">
+    <path d="M0 -7 L1.6 -1.6 L7 0 L1.6 1.6 L0 7 L-1.6 1.6 L-7 0 L-1.6 -1.6 Z" fill="url(#wm-spark)"/>
+    <circle r="1.4" fill="#FFFBE6"/>
+  </g>
+  <!-- Tiny TM mark for prestige -->
+  <text x="170" y="14" fill="#D4AF37" font-family="ui-sans-serif, system-ui, sans-serif" font-size="6" font-weight="700" letter-spacing="0.05em">"</text>
+</svg>

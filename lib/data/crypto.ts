@@ -1,0 +1,78 @@
+import { assets } from "../assets";
+import type { CryptoCurrency } from "../types";
+
+export const cryptos: CryptoCurrency[] = [
+  {
+    id: "btc",
+    symbol: "BTC",
+    name: "Bitcoin",
+    network: "BTC",
+    icon: assets.crypto.btc,
+    minDeposit: 50,
+  },
+  {
+    id: "eth",
+    symbol: "ETH",
+    name: "Ethereum",
+    network: "ERC20",
+    icon: assets.crypto.eth,
+    minDeposit: 50,
+  },
+  {
+    id: "usdt",
+    symbol: "USDT",
+    name: "Tether",
+    network: "TRC20",
+    icon: assets.crypto.usdt,
+    minDeposit: 50,
+    supportedNetworks: ["TRC20", "ERC20", "BEP20", "Polygon"],
+  },
+  {
+    id: "usdc",
+    symbol: "USDC",
+    name: "USD Coin",
+    network: "ERC20",
+    icon: assets.crypto.usdc,
+    minDeposit: 50,
+  },
+  {
+    id: "bnb",
+    symbol: "BNB",
+    name: "Binance Coin",
+    network: "BEP20",
+    icon: assets.crypto.bnb,
+    minDeposit: 50,
+  },
+  {
+    id: "trx",
+    symbol: "TRX",
+    name: "Tron",
+    network: "TRC20",
+    icon: assets.crypto.trx,
+    minDeposit: 50,
+  },
+  {
+    id: "sol",
+    symbol: "SOL",
+    name: "Solana",
+    network: "SOL",
+    icon: assets.crypto.sol,
+    minDeposit: 50,
+  },
+  {
+    id: "ton",
+    symbol: "TON",
+    name: "Toncoin",
+    network: "TON",
+    icon: assets.crypto.ton,
+    minDeposit: 50,
+  },
+  {
+    id: "xrp",
+    symbol: "XRP",
+    name: "Ripple",
+    network: "XRP",
+    icon: assets.crypto.xrp,
+    minDeposit: 50,
+  },
+];

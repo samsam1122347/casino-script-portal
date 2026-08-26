@@ -1,0 +1,1238 @@
+@import "tailwindcss";
+
+@theme {
+  /* Obsidian floor — content reads as a lit stage against darker edges */
+  --color-bg: #050815;
+  --color-bg-deep: #02040d;
+  --color-bg-elevated: #080d20;
+  --color-panel: #0d1230;
+  --color-panel-2: #12183a;
+  --color-panel-3: #1a2250;
+  --color-line: #26305f;
+
+  --color-text: #f6f7ff;
+  --color-text-muted: #9ca6cf;
+  --color-text-dim: #767da0;
+
+  --color-brand: #23f36f;
+  --color-brand-dark: #031c16;
+  --color-brand-soft: rgba(0, 240, 128, 0.14);
+  --color-purple: #8a55ff;
+  --color-orange: #ff7a32;
+  --color-pink: #ff3368;
+  --color-blue: #3477e8;
+  /* Ice / aqua rim (keeps `--color-gold` name only for backwards compat in classnames). */
+  --color-accent-ice: #5eeedc;
+  --color-accent-ice-soft: rgba(94, 238, 220, 0.16);
+  --color-gold: #5eeedc;
+  --color-gold-soft: rgba(94, 238, 220, 0.16);
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --section-gap: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+
+  /* Glass chrome: tight top bevel, restrained glow */
+  --chrome-border: rgba(153, 169, 255, 0.16);
+  /* Inner glow on lifted cards — mint, not brass */
+  --chrome-border-rim: rgba(35, 243, 111, 0.16);
+  --elevated-glow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+
+  --shadow-glow:
+    0 0 32px rgba(35, 243, 111, 0.26),
+    0 0 1px rgba(35, 243, 111, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --shadow-card: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
+  --shadow-chrome:
+    var(--elevated-glow),
+    0 1px 0 rgba(35, 243, 111, 0.06) inset,
+    0 22px 48px -28px rgba(0, 0, 0, 0.72);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Type stacks — variable values are injected by next/font on <html>. */
+  --font-sans:
+    var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-display:
+    var(--font-display), var(--font-sans), system-ui, sans-serif;
+  --font-mono:
+    var(--font-mono), ui-monospace, "SFMono-Regular", "JetBrains Mono",
+    "Fira Code", Menlo, monospace;
+
+  /* Type scale — fluid, mobile-first. clamp(min, preferred, max). */
+  --text-xs: 0.75rem; /* 12 */
+  --text-sm: 0.875rem; /* 14 */
+  --text-base: 1rem; /* 16 */
+  --text-lg: 1.125rem; /* 18 */
+  --text-xl: 1.25rem; /* 20 */
+  --text-2xl: clamp(1.375rem, 1.2rem + 0.7vw, 1.625rem); /* 22→26 */
+  --text-3xl: clamp(1.625rem, 1.35rem + 1.1vw, 2rem); /* 26→32 */
+  --text-4xl: clamp(2rem, 1.5rem + 2vw, 2.625rem); /* 32→42 */
+  --text-5xl: clamp(2.5rem, 1.6rem + 3.4vw, 3.5rem); /* 40→56 */
+  --text-display: clamp(2.75rem, 1.6rem + 4.4vw, 4.25rem); /* 44→68 */
+
+  --leading-display: 0.95;
+  --leading-tight: 1.05;
+  --leading-snug: 1.18;
+  --leading-base: 1.45;
+  --leading-relaxed: 1.65;
+
+  --tracking-display: 0;
+  --tracking-tight: 0;
+  --tracking-base: 0;
+  --tracking-eyebrow: 0.14em;
+
+  --breakpoint-xs: 22.5rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  position: relative;
+  background: var(--color-bg-deep);
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+/* Ultra-subtle film grain — sits behind all content.
+   SVG `feTurbulence` is rasterized on every paint, which destroys mobile
+   scrolling perf. Promote to its own compositor layer so it is generated
+   once and reused, and hide it on mobile / reduced-data where it adds
+   nothing visible. */
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@media (max-width: 48rem), (prefers-reduced-motion: reduce), (prefers-reduced-data: reduce) {
+  html::before {
+    display: none;
+  }
+}
+
+body {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100dvh;
+  overflow-x: clip;
+  background:
+    radial-gradient(ellipse 90% 55% at 100% -25%, rgba(35, 243, 111, 0.095), transparent 52%),
+    radial-gradient(ellipse 70% 45% at -10% 110%, rgba(138, 85, 255, 0.1), transparent 48%),
+    radial-gradient(ellipse 55% 40% at 50% 120%, rgba(52, 119, 232, 0.06), transparent 55%),
+    radial-gradient(circle at 50% -8%, rgba(30, 40, 75, 0.42), transparent 36rem),
+    linear-gradient(180deg, var(--color-bg-deep) 0%, var(--color-bg) 18%, var(--color-bg) 100%);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+  letter-spacing: var(--tracking-base);
+  /* Manrope: kerning + contextual ligatures, leave stylistic sets default. */
+  font-feature-settings: "kern", "calt", "ss03";
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+}
+
+/* ── Typography utilities ────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-feature-settings: "kern", "ss01";
+}
+.font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum", "zero", "ss01", "cv01", "cv02";
+  letter-spacing: -0.01em;
+}
+
+/* Eyebrow / kicker label */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Lead paragraph — sits under heroes / page heroes */
+.lead {
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+/* Numeric utility — applies to inline money / multipliers */
+.numeric {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum", "zero", "ss01";
+  font-variant-numeric: tabular-nums slashed-zero;
+  letter-spacing: -0.01em;
+}
+
+/* Display headlines — hero H1 sized, balanced */
+.display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: var(--text-display);
+  font-weight: 800;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+
+/* Hero headline — brand edge without neon overload */
+.display-accent {
+  background: linear-gradient(
+    105deg,
+    #fff 12%,
+    #eefcf4 42%,
+    var(--color-brand) 92%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.h4 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* Body text helpers — keep paragraph rhythm tidy */
+p {
+  text-wrap: pretty;
+}
+
+/* Tabular nums helper used across the app */
+.tabular-nums {
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Global focus ring */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+/* Skip-to-content */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--color-brand);
+  color: var(--color-brand-dark);
+  font-weight: 800;
+  border-radius: 0 0 12px 0;
+  transition: top 180ms ease;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ── Reusable surface helpers ────────────────────────────────────────── */
+.surface {
+  border-radius: var(--radius-xl);
+  background: var(--color-panel);
+}
+.surface-elevated {
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-elevated);
+}
+.surface-line {
+  border: 1px solid var(--chrome-border);
+}
+
+/* Premium panel chrome — reuse on hero, crash, marketing cards */
+.surface-premium {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--color-panel-2) 88%, var(--color-panel)) 0%,
+    var(--color-panel) 100%
+  );
+  box-shadow: var(--shadow-chrome);
+  border: 1px solid var(--chrome-border);
+}
+
+.surface-premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: var(--elevated-glow);
+}
+
+.dashboard-shell {
+  border: 1px solid var(--chrome-border);
+  border-radius: var(--radius-2xl);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 18%),
+    linear-gradient(145deg, rgba(18, 24, 58, 0.92), rgba(5, 8, 21, 0.96));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 24px 70px -40px rgba(0, 0, 0, 0.95);
+}
+
+.dashboard-card {
+  border: 1px solid rgba(153, 169, 255, 0.14);
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 32%),
+    rgba(13, 18, 48, 0.84);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 42px -30px rgba(0, 0, 0, 0.9);
+}
+
+.dashboard-card-compact {
+  border: 1px solid rgba(153, 169, 255, 0.12);
+  border-radius: var(--radius-lg);
+  background: rgba(18, 24, 58, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.dashboard-row {
+  border: 1px solid rgba(153, 169, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02));
+}
+
+.mobile-rail {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1rem;
+  padding-bottom: 0.25rem;
+  scrollbar-width: none;
+}
+.mobile-rail::-webkit-scrollbar {
+  display: none;
+}
+.mobile-rail > * {
+  scroll-snap-align: start;
+}
+
+.green-text-glow {
+  color: var(--color-brand);
+  text-shadow: 0 0 22px rgba(35, 243, 111, 0.35);
+}
+
+/* Dual-edge ring without extra DOM */
+.ring-premium {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 0 1px var(--chrome-border-rim) inset,
+    var(--shadow-chrome);
+}
+
+/* Cool headline shimmer — aqua into white ice */
+.text-gradient-ice {
+  background: linear-gradient(
+    105deg,
+    var(--color-accent-ice) 0%,
+    #e8fff8 38%,
+    #f8faff 76%,
+    color-mix(in srgb, var(--color-purple) 45%, white) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Primary CTA — layered green + slow shimmer (background layers keep label legible) */
+.btn-premium-primary {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(
+      100deg,
+      transparent 36%,
+      rgba(255, 255, 255, 0.2) 49.5%,
+      transparent 63%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-brand) 115%, white) 0%,
+      var(--color-brand) 52%,
+      color-mix(in srgb, var(--color-brand) 82%, #03120c) 100%
+    );
+  background-size: 220% 100%, 100% 100%;
+  background-position: 130% 0, 0 0;
+  animation: premium-shimmer 5.2s ease-in-out infinite;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 1px 0 rgba(0, 0, 0, 0.18) inset,
+    var(--shadow-glow);
+}
+
+.btn-premium-primary:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 1px 0 rgba(0, 0, 0, 0.15) inset,
+    0 0 36px rgba(0, 240, 128, 0.38),
+    0 0 1px rgba(0, 240, 128, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-premium-primary {
+    animation: none;
+    background-position: 0 0, 0 0;
+  }
+}
+
+/* Header secondary CTA — glass + ice rim (pairs with `.btn-premium-primary`) */
+.btn-premium-outline {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(94, 238, 220, 0.22),
+    0 0 28px -12px rgba(94, 238, 220, 0.35);
+}
+
+.btn-premium-outline:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 0 1px rgba(94, 238, 220, 0.42),
+    0 0 36px -10px rgba(35, 243, 111, 0.32);
+}
+
+.btn-premium-outline:active {
+  transform: translateY(1px);
+}
+
+@keyframes premium-shimmer {
+  0%,
+  28% {
+    background-position: -40% 0, 0 0;
+  }
+  72%,
+  100% {
+    background-position: 140% 0, 0 0;
+  }
+}
+
+/* Shell / VIP micro-motion */
+@keyframes vip-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.78;
+  }
+}
+
+.vip-progress-live {
+  animation: vip-live-pulse 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vip-progress-live {
+    animation: none;
+  }
+}
+
+/* Hero / promo soft ice corner gloss */
+.corner-accent-surface {
+  position: relative;
+}
+.corner-accent-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(94, 238, 220, 0.1) 0%,
+    transparent 42%
+  );
+}
+
+/* Top hairline highlight for marketing strips */
+.strip-highlight-top {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ── Marquee (Big Wins ticker) ───────────────────────────────────────── */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  display: flex;
+  gap: 0.625rem;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+  will-change: transform;
+}
+.marquee-wrap:hover .marquee {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation: none;
+  }
+}
+
+/* ── Game card hover lift (CSS for perf, no JS needed) ───────────────── */
+.lift {
+  transition:
+    transform 220ms var(--ease-out-soft),
+    box-shadow 220ms var(--ease-out-soft);
+}
+.lift:hover,
+.lift:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+}
+
+/* ── Crash animated chart ────────────────────────────────────────────── */
+@keyframes rocketBob {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-8deg);
+  }
+  50% {
+    transform: translate(-6px, -10px) rotate(-4deg);
+  }
+}
+.rocket-bob {
+  animation: rocketBob 3.6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 240, 128, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 28px 6px rgba(0, 240, 128, 0);
+  }
+}
+.pulse-glow {
+  animation: pulseGlow 2.4s ease-in-out infinite;
+}
+
+/* ── Subtle progress shimmer ─────────────────────────────────────────── */
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+  }
+}
+
+.pulse-glow,
+.rocket-bob {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-glow,
+  .rocket-bob {
+    animation: none;
+  }
+}
+
+/* ── Hide scrollbar utility ──────────────────────────────────────────── */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Animations for Radix popovers ───────────────────────────────────── */
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+[data-radix-popper-content-wrapper] {
+  /* Must sit above mobile nav sheet (`z-[125]`) so dropdowns (e.g. language) work */
+  z-index: 135;
+}
+.radix-overlay {
+  animation: overlayShow 180ms var(--ease-out-soft);
+}
+.radix-content {
+  animation: contentShow 180ms var(--ease-out-soft);
+}
+.radix-sheet-right {
+  animation: slideInRight 280ms var(--ease-out-soft);
+}
+.radix-sheet-left {
+  animation: slideInLeft 280ms var(--ease-out-soft);
+}
+
+/* Below-fold home stack: skip layout/paint work until needed */
+.home-below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2200px;
+}
+
+/* Mobile: heavy `backdrop-filter` blur destroys GPU/composition perf.
+   Trim the blur radius globally on small viewports and for reduced-motion
+   users — visually nearly identical, dramatically cheaper to paint. */
+@media (max-width: 48rem) {
+  [class*="backdrop-blur"] {
+    backdrop-filter: blur(8px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (prefers-reduced-data: reduce) {
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* ── Brand lockup chrome ─────────────────────────────────────────────── */
+/* Polished plinth that holds the square mark in headers and footers.       */
+.brand-plinth {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(110% 140% at 50% -20%, rgba(255, 255, 255, 0.16), transparent 55%),
+    linear-gradient(160deg, #0e2920 0%, #04140f 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(94, 238, 220, 0.28),
+    0 0 0 1px rgba(0, 240, 128, 0.18),
+    0 14px 28px -14px rgba(0, 240, 128, 0.42),
+    0 0 24px -10px rgba(0, 240, 128, 0.55);
+}
+
+.brand-plinth::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(70% 90% at 50% 110%, rgba(0, 240, 128, 0.22), transparent 60%);
+  filter: blur(6px);
+}
+
+/* Wordmark — white into mint / brand */
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  background: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #eff8ff 38%,
+    #c7ffe8 72%,
+    var(--color-brand) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hairline rule under wordmarks / section dividers */
+.chrome-rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(35, 243, 111, 0.35) 22%,
+    rgba(94, 238, 220, 0.55) 50%,
+    rgba(138, 85, 255, 0.35) 78%,
+    transparent
+  );
+}
+
+/* Slow 360° rotation for ambient brand badges */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin-slow 22s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin-slow {
+    animation: none;
+  }
+}
+
+/* Gentle live-pulse halo (used by the hero "live multiplier" chip) */
+@keyframes live-halo {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(0, 240, 128, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+  50% {
+    box-shadow:
+      0 0 0 10px rgba(0, 240, 128, 0),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+}
+.live-halo {
+  animation: live-halo 2.4s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-halo,
+  .orbit-glow,
+  .spin-slow {
+    animation: none;
+  }
+  .auth-shell-aurora::before {
+    animation: none;
+  }
+}
+
+/* Hero live multiplier orbital glow */
+@keyframes orbit-pulse {
+  0%,
+  100% {
+    opacity: 0.88;
+    filter: drop-shadow(0 0 6px rgba(0, 240, 128, 0.35))
+      drop-shadow(0 0 2px rgba(255, 255, 255, 0.12));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 14px rgba(0, 240, 128, 0.55))
+      drop-shadow(0 0 18px rgba(94, 238, 220, 0.18));
+  }
+}
+
+.orbit-glow {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  animation: orbit-pulse 3.8s ease-in-out infinite;
+}
+
+/* Auth panels — drifting aurora halo */
+@keyframes aurora-shift {
+  0% {
+    opacity: 0.55;
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    opacity: 0.92;
+    transform: rotate(-6deg) scale(1.04);
+  }
+  100% {
+    opacity: 0.6;
+    transform: rotate(-12deg) scale(1);
+  }
+}
+
+.auth-shell-aurora {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.auth-shell-aurora::before {
+  content: "";
+  position: absolute;
+  inset: -42%;
+  z-index: 0;
+  background: radial-gradient(
+      circle at 18% 20%,
+      color-mix(in srgb, var(--color-purple) 45%, transparent) 0%,
+      transparent 52%
+    ),
+    radial-gradient(
+      circle at 88% 10%,
+      color-mix(in srgb, var(--color-brand) 38%, transparent) 0%,
+      transparent 48%
+    ),
+    radial-gradient(
+      circle at 55% 100%,
+      color-mix(in srgb, var(--color-accent-ice) 52%, transparent) 0%,
+      transparent 50%
+    );
+  opacity: 0.55;
+  animation: aurora-shift 22s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.auth-shell-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Brand mark loading shimmer — applied to <img> while booting */
+@keyframes brand-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 18px rgba(0, 240, 128, 0.35));
+  }
+  50% {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 28px rgba(0, 240, 128, 0.6));
+  }
+}
+.brand-pulse {
+  animation: brand-pulse 2.6s ease-in-out infinite;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-pulse {
+    animation: none;
+  }
+}
+
+/* ── Premium hero corner glints ──────────────────────────────────────── */
+.glint-corners::before,
+.glint-corners::after {
+  content: "";
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  pointer-events: none;
+  border-radius: 4px;
+}
+.glint-corners::before {
+  top: 12px;
+  left: 12px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.glint-corners::after {
+  bottom: 12px;
+  right: 12px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* ── Crash stage: SVG rocket + CSS moon ─────────────────────────────────
+   The rocket DOM lives at `<div class="crash-rocket-stage">` inside the
+   crash canvas. Its origin glides along the curve via two CSS vars set
+   from React (--rocket-x / --rocket-y) while every inner flame/streak
+   loop animates on the GPU. The visual is purposefully exaggerated; we
+   keep one source of motion (the rocket) so the rest of the page is
+   calm.
+   ───────────────────────────────────────────────────────────────────── */
+.crash-rocket-stage {
+  --rocket-w: clamp(78px, 16vw, 124px);
+  --rocket-h: calc(var(--rocket-w) * 1.81);
+  --rocket-x: 12%;
+  --rocket-y: 88%;
+  --rocket-tilt: 45deg;
+  --rocket-scale: 1;
+}
+
+@media (max-width: 40rem) {
+  .crash-rocket-stage {
+    --rocket-w: clamp(64px, 18vw, 92px);
+  }
+}
+
+.crash-rocket {
+  position: absolute;
+  left: var(--rocket-x);
+  top: var(--rocket-y);
+  width: var(--rocket-w);
+  height: var(--rocket-h);
+  transform: translate(-50%, -50%) rotate(var(--rocket-tilt))
+    scale(var(--rocket-scale));
+  transition: transform 90ms linear;
+  will-change: transform, left, top;
+  filter: drop-shadow(0 12px 22px rgba(35, 243, 111, 0.22))
+    drop-shadow(0 0 14px rgba(94, 234, 219, 0.18));
+}
+
+.crash-rocket__body {
+  position: absolute;
+  inset: 0;
+  animation: crash-rocket-vibration 0.18s infinite;
+}
+
+.crash-rocket--preparing .crash-rocket__body {
+  animation-duration: 0.4s;
+}
+.crash-rocket--crashed .crash-rocket__body {
+  animation: none;
+  filter: grayscale(0.4) brightness(0.85);
+}
+
+@keyframes crash-rocket-vibration {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(1px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.crash-rocket__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Animated flame plumes — SVG-friendly opacity flicker keeps the rocket
+   alive without depending on transform-box / transform-origin which are
+   inconsistent across mobile browsers when applied to SVG groups. */
+.crash-rocket__flame--core {
+  animation: crash-flame-core 0.18s ease-in-out infinite alternate;
+}
+.crash-rocket__flame--side1 {
+  animation: crash-flame-side 0.32s ease-in-out infinite alternate;
+}
+.crash-rocket__flame--side2 {
+  animation: crash-flame-side 0.32s 0.16s ease-in-out infinite alternate;
+}
+.crash-rocket--crashed .crash-rocket__flame--core,
+.crash-rocket--crashed .crash-rocket__flame--side1,
+.crash-rocket--crashed .crash-rocket__flame--side2,
+.crash-rocket--preparing .crash-rocket__flame--core,
+.crash-rocket--preparing .crash-rocket__flame--side1,
+.crash-rocket--preparing .crash-rocket__flame--side2 {
+  animation: none;
+  opacity: 0.35;
+}
+
+@keyframes crash-flame-core {
+  from { opacity: 0.85; }
+  to   { opacity: 1;    }
+}
+@keyframes crash-flame-side {
+  from { opacity: 0.55; }
+  to   { opacity: 1;    }
+}
+
+.crash-rocket__halo {
+  animation: crash-halo 1.2s ease-in-out infinite alternate;
+}
+@keyframes crash-halo {
+  from { opacity: 0.4; }
+  to   { opacity: 0.85; }
+}
+
+/* Hyperspace speed-lines that surround the rocket while flying. */
+.crash-rocket__streak {
+  position: absolute;
+  left: var(--rocket-x);
+  top: var(--rocket-y);
+  width: 3px;
+  height: clamp(26px, 6vw, 42px);
+  border-radius: 4px;
+  background: linear-gradient(180deg, transparent, #c7ffe8 50%, transparent);
+  filter: drop-shadow(0 0 6px rgba(94, 234, 219, 0.55));
+  transform: translate(var(--sx, 0px), var(--sy, 0px));
+  opacity: 0;
+  pointer-events: none;
+}
+.crash-rocket--flying .crash-rocket__streak {
+  animation: crash-hyperspace 0.55s linear infinite;
+}
+.crash-rocket__streak--1 { --sx: -30px; --sy: -18px; animation-delay: 0.00s; }
+.crash-rocket__streak--2 { --sx:  22px; --sy: -30px; animation-delay: 0.12s; }
+.crash-rocket__streak--3 { --sx:  40px; --sy:  10px; animation-delay: 0.22s; }
+.crash-rocket__streak--4 { --sx: -38px; --sy:  18px; animation-delay: 0.32s; }
+.crash-rocket__streak--5 { --sx:   4px; --sy: -42px; animation-delay: 0.06s; }
+.crash-rocket__streak--6 { --sx: -10px; --sy:  36px; animation-delay: 0.18s; }
+@keyframes crash-hyperspace {
+  0%   { transform: translate(var(--sx), calc(var(--sy) - 28px)) scaleY(0.4); opacity: 0; }
+  20%  { opacity: 0.9; }
+  100% { transform: translate(var(--sx), calc(var(--sy) + 50px)) scaleY(1);   opacity: 0; }
+}
+
+/* Crash boom — quick 6-particle radial burst at crash position. */
+.crash-rocket__boom {
+  position: absolute;
+  left: var(--rocket-x);
+  top: var(--rocket-y);
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.crash-rocket__boom > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffd9a0 0%, #ff5260 60%, transparent 70%);
+  animation: crash-boom 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  filter: drop-shadow(0 0 10px rgba(255, 80, 96, 0.8));
+}
+.crash-rocket__boom > span:nth-child(1) { --bx: 36px;  --by: -22px; }
+.crash-rocket__boom > span:nth-child(2) { --bx: -42px; --by: -8px;  }
+.crash-rocket__boom > span:nth-child(3) { --bx: -28px; --by: 28px;  }
+.crash-rocket__boom > span:nth-child(4) { --bx: 32px;  --by: 28px;  }
+.crash-rocket__boom > span:nth-child(5) { --bx: 8px;   --by: -40px; }
+.crash-rocket__boom > span:nth-child(6) { --bx: -10px; --by: 38px;  }
+@keyframes crash-boom {
+  0%   { transform: translate(0, 0)              scale(0.4); opacity: 1; }
+  100% { transform: translate(var(--bx), var(--by)) scale(1.8); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crash-rocket__body,
+  .crash-rocket__flame,
+  .crash-rocket__halo,
+  .crash-rocket__streak,
+  .crash-rocket__boom > span {
+    animation: none !important;
+  }
+  .crash-rocket {
+    transition: none !important;
+  }
+}
+
+/* ── Crash moon (CSS-only adaptation of the CodePen scene) ───────────── */
+.crash-moon-stage {
+  --moon-scale: 1;
+  --moon-glow: 0.6;
+  isolation: isolate;
+}
+
+.crash-moon {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 32% 30%,
+      #ffffff 0%,
+      #fff7e0 22%,
+      #efdcb1 48%,
+      #c0a87a 78%,
+      #8c7456 100%
+    );
+  box-shadow:
+    inset -8px -10px 18px rgba(70, 50, 25, 0.45),
+    inset 8px 10px 16px rgba(255, 255, 255, 0.4),
+    0 0 calc(40px + 30px * var(--moon-glow))
+      calc(2px + 2px * var(--moon-glow))
+      rgba(255, 226, 158, calc(0.55 + 0.35 * var(--moon-glow)));
+  transform: scale(var(--moon-scale));
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+.crash-moon::before,
+.crash-moon::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(120, 80, 40, 0.42) 0%,
+    rgba(120, 80, 40, 0.12) 60%,
+    transparent 75%
+  );
+  pointer-events: none;
+}
+.crash-moon::before {
+  top: 24%;
+  left: 32%;
+  width: 18%;
+  height: 18%;
+  box-shadow:
+    22% 42% 0 -3px rgba(110, 70, 30, 0.38),
+    -28% 14% 0 -1px rgba(110, 70, 30, 0.32),
+    44% 6% 0 -5px rgba(110, 70, 30, 0.3);
+}
+.crash-moon::after {
+  top: 60%;
+  left: 22%;
+  width: 14%;
+  height: 14%;
+  box-shadow:
+    18% -24% 0 -3px rgba(110, 70, 30, 0.32),
+    36% 28% 0 -2px rgba(110, 70, 30, 0.34),
+    -6% 42% 0 -5px rgba(110, 70, 30, 0.3);
+}
+
+.crash-moon__halo {
+  position: absolute;
+  inset: -45%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 226, 158, calc(0.28 * var(--moon-glow))) 0%,
+    rgba(255, 226, 158, 0.05) 40%,
+    rgba(255, 226, 158, 0) 70%
+  );
+  filter: blur(8px);
+  z-index: 0;
+  animation: crash-moon-pulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes crash-moon-pulse {
+  from { opacity: 0.7; transform: scale(0.95); }
+  to   { opacity: 1;   transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crash-moon {
+    transition: none;
+  }
+  .crash-moon__halo {
+    animation: none;
+  }
+}

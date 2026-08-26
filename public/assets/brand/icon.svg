@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" role="img" aria-label="CrashX">
+  <defs>
+    <linearGradient id="ic-bg" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F2E25"/>
+      <stop offset="1" stop-color="#04140F"/>
+    </linearGradient>
+    <linearGradient id="ic-mark" x1="6" y1="26" x2="28" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00F080"/>
+      <stop offset="0.7" stop-color="#7DFFCB"/>
+      <stop offset="1" stop-color="#F4D689"/>
+    </linearGradient>
+    <linearGradient id="ic-gold" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F8E2A0"/>
+      <stop offset="1" stop-color="#A07717"/>
+    </linearGradient>
+  </defs>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" fill="url(#ic-bg)" stroke="url(#ic-gold)" stroke-opacity="0.6"/>
+  <g stroke="url(#ic-mark)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M10 8 V23 H21"/>
+    <path d="M16 23 Q21 23 24 19 T28 9.5" stroke-width="1.8"/>
+  </g>
+  <circle cx="28" cy="9" r="1.4" fill="url(#ic-gold)"/>
+</svg>

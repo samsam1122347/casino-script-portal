@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none" role="img" aria-label="CrashX monogram">
+  <defs>
+    <linearGradient id="lrwm-mark" x1="16" y1="50" x2="54" y2="14" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00F080"/>
+      <stop offset="0.5" stop-color="#7DFFCB"/>
+      <stop offset="0.85" stop-color="#FFF1C7"/>
+      <stop offset="1" stop-color="#F4D689"/>
+    </linearGradient>
+    <linearGradient id="lrwm-gold" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F8E2A0"/>
+      <stop offset="0.5" stop-color="#D4AF37"/>
+      <stop offset="1" stop-color="#9A7117"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M19.5 14 V47 H42" stroke="url(#lrwm-mark)" stroke-width="7"/>
+    <path d="M28 47 Q41 47 47 37 T57 17" stroke="url(#lrwm-mark)" stroke-width="3.4" stroke-opacity="0.95"/>
+  </g>
+  <g transform="translate(57 17)">
+    <path d="M0 -5.5 L1.3 -1.3 L5.5 0 L1.3 1.3 L0 5.5 L-1.3 1.3 L-5.5 0 L-1.3 -1.3 Z" fill="url(#lrwm-gold)"/>
+    <circle r="1.2" fill="#FFFBE6"/>
+  </g>
+  <circle cx="19.5" cy="47" r="1.9" fill="#F4D689"/>
+</svg>
