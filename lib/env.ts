@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
+  NEXT_PUBLIC_SITE_URL: z.string().url().default("https://crashflyy.com"),
   NEXT_PUBLIC_SITE_NAME: z.string().min(1).default("CrashX"),
   NEXT_PUBLIC_SITE_TAGLINE: z
     .string()
@@ -37,7 +37,7 @@ const envSchema = z.object({
       );
     }),
   NEXT_PUBLIC_PUSHER_APP_CLUSTER: z.string().default("mt1"),
-  NEXT_PUBLIC_WS_HOST: z.string().default("localhost:3000"),
+  NEXT_PUBLIC_WS_HOST: z.string().default("crashflyy.com"),
   NEXT_PUBLIC_WS_PORT: z.coerce.number().default(443),
   NEXT_PUBLIC_WSS_PORT: z.coerce.number().default(443),
   NEXT_PUBLIC_PUSHER_SCHEME: z.enum(["http", "https"]).default("https"),
