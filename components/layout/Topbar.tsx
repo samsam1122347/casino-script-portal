@@ -29,7 +29,7 @@ export async function TopbarActions() {
           <BalancePill
             balanceMajor={balanceMajor}
             size="compact"
-            className="hidden min-[420px]:block md:hidden"
+            className="md:hidden"
           />
           <BalancePill
             balanceMajor={balanceMajor}
