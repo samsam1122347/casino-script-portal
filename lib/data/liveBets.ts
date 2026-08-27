@@ -108,7 +108,7 @@ function makeId(len = 10): string {
 
 export function createLiveBet(locale: string = "en"): LiveBet {
   const username = makeName(locale);
-  const bet = randFloat(5, 1500);
+  const bet = randFloat(1, 150);
 
   // ~38 % bust rate — enough red to feel honest, mostly wins for marketing
   const bust = rand() < 0.38;
@@ -128,10 +128,10 @@ export function createLiveBet(locale: string = "en"): LiveBet {
   const roll = rand();
   const mult =
     roll < 0.04
-      ? randFloat(30, 280)
+      ? randFloat(10, 50)
       : roll < 0.18
-        ? randFloat(6, 24)
-        : randFloat(1.05, 5.5);
+        ? randFloat(3, 10)
+        : randFloat(1.01, 3.5);
 
   return {
     id: makeId(10),
@@ -155,8 +155,8 @@ export function createTopMultipliers(
 ): TopMultiplier[] {
   return Array.from({ length: count }, () => {
     const username = makeName(locale);
-    const multiplier = randFloat(12, 460);
-    const stake = randFloat(20, 800);
+    const multiplier = randFloat(5, 50);
+    const stake = randFloat(2, 50);
     return {
       id: makeId(8),
       username,
