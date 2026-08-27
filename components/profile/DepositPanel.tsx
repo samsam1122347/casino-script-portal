@@ -181,7 +181,7 @@ export function DepositPanel({ apiAssets }: DepositPanelProps) {
       setShowClaimButtons(false);
     } catch (e) {
       toast({
-        variant: "danger",
+        variant: "destructive",
         title: "Error",
         description: "Failed to submit claim. Please try again or contact support.",
       });
