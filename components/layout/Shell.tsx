@@ -2,6 +2,7 @@ import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { BottomNav } from "./BottomNav";
 import { FloatSupport } from "./FloatSupport";
+import { FloatTelegram } from "./FloatTelegram";
 import { Footer } from "./Footer";
 import { NavigationProgress } from "./NavigationProgress";
 import { AuthSessionCleanup } from "@/components/auth/AuthSessionCleanup";
@@ -40,6 +41,7 @@ export async function Shell({ children }: { children: React.ReactNode }) {
         </main>
       </div>
 
+      <FloatTelegram />
       <FloatSupport />
       <BottomNav authed={authed} />
     </div>

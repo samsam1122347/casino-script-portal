@@ -9,18 +9,21 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
+import { Volume2, VolumeX } from "lucide-react";
+import { formatMoney } from "@/lib/format";
 import { CrashVideoStageLazy } from "@/components/game/CrashVideoStageLazy";
 import { MultiplierTicker } from "@/components/game/MultiplierTicker";
 import { FairnessVerifier } from "@/components/game/FairnessVerifier";
 import { cn } from "@/lib/cn";
 import { env } from "@/lib/env";
-import { playCrashSound, unlockCrashSounds } from "@/lib/game/crashSounds";
+import { playCrashSound, unlockCrashSounds, crashSoundsMuted, setCrashSoundsMuted } from "@/lib/game/crashSounds";
 import {
   getCrashState,
   hydrateAuthoritativeFromServerState,
   ingestAuthoritativeTick,
   reconcileActiveRealBet,
   restoreOpenRealBetFromServer,
+  useCrashState,
 } from "@/lib/game/crashStore";
 import { crashPrivateChannelName, getEcho } from "@/lib/realtime/echoClient";
 
@@ -83,6 +86,28 @@ export function CrashLiveSection({
   const [authorizeCanvas, setAuthorizeCanvas] = useState(
     () => !applyPublicRoundState,
   );
+
+  const minorBal = useCrashState((s) => s.realBalanceMinor);
+  const practiceBalance = useCrashState((s) => s.practiceBalance);
+  const mode = useCrashState((s) => s.mode);
+  const balance = mode === "real" ? Math.max(0, minorBal) / 100 : practiceBalance;
+  const balanceHint = balance > 0 ? t("balanceHint", { balance: formatMoney(balance) }) : t("balanceEmptyHint");
+
+  const [soundOff, setSoundOff] = useState(false);
+  useEffect(() => {
+    setSoundOff(crashSoundsMuted());
+  }, []);
+
+  const toggleSound = useCallback(() => {
+    unlockCrashSounds();
+    const currentlyMuted = crashSoundsMuted();
+    const newMuted = !currentlyMuted;
+    setCrashSoundsMuted(newMuted);
+    setSoundOff(newMuted);
+    if (!newMuted) {
+      playCrashSound("tickSoft");
+    }
+  }, []);
 
   const lastPhaseRef = useRef<string>("");
   const lastRoundAnnounceAtRef = useRef(0);
@@ -454,6 +479,37 @@ export function CrashLiveSection({
             {t("roundHistoryLabel")}
           </p>
           <div className="flex min-w-0 items-center gap-1.5 sm:gap-3">
+            <div className="flex shrink-0 items-center gap-2 mr-2 border-r border-white/10 pr-2 sm:mr-3 sm:pr-3">
+              <span
+                className={cn(
+                  "numeric rounded-lg px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-extrabold tabular-nums",
+                  balance > 0
+                    ? "bg-[var(--color-brand)]/[0.1] text-[var(--color-brand)]"
+                    : "bg-amber-400/[0.12] text-amber-200",
+                )}
+              >
+                {balanceHint}
+              </span>
+              <button
+                type="button"
+                onClick={() => toggleSound()}
+                className={cn(
+                  "grid size-7 sm:size-8 shrink-0 place-items-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/55",
+                  soundOff
+                    ? "bg-white/[0.04] text-white/40 hover:bg-white/[0.08]"
+                    : "bg-[var(--color-brand)]/12 text-[var(--color-brand)] hover:bg-[var(--color-brand)]/18",
+                )}
+                aria-pressed={!soundOff}
+                aria-label={soundOff ? t("soundMutedAria") : t("soundOnAria")}
+                title={soundOff ? t("soundUnmute") : t("soundMute")}
+              >
+                {soundOff ? (
+                  <VolumeX className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden />
+                ) : (
+                  <Volume2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden />
+                )}
+              </button>
+            </div>
             {latencyMs != null && status === "live" ? (
               <span className="numeric hidden text-[11px] font-bold tabular-nums text-white/38 sm:inline">
                 {latencyMs}ms

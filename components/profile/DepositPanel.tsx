@@ -12,6 +12,7 @@ import type { CryptoCurrency } from "@/lib/types";
 import type { TenantCryptoAsset } from "@/lib/types/tenant-crypto";
 import { formatMoney } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { toast } from "@/lib/toast-bus";
 
 type DepositPanelProps = {
   apiAssets: TenantCryptoAsset[];
@@ -97,6 +98,9 @@ export function DepositPanel({ apiAssets }: DepositPanelProps) {
 
   /** User pick when valid; `null` means “follow first selectable”. */
   const [pickedKey, setPickedKey] = useState<string | null>(null);
+  
+  const [showClaimButtons, setShowClaimButtons] = useState(false);
+  const [isClaiming, setIsClaiming] = useState(false);
 
   const defaultKey = selectable[0] ? cryptoKey(selectable[0]) : "";
   const activeKey = useMemo(() => {
@@ -154,6 +158,37 @@ export function DepositPanel({ apiAssets }: DepositPanelProps) {
 
   const active = assetByNet.get(`${display.id}:${display.network}`);
   const address = active?.address?.trim() ?? "";
+
+  const handleClaim = async () => {
+    if (!display || isClaiming) return;
+    setIsClaiming(true);
+    try {
+      const res = await fetch("/api/wallet/deposit-claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currency: display.symbol,
+          network: display.network,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to claim deposit");
+      
+      toast({
+        variant: "success",
+        title: t("claimSuccessTitle", { fallback: "Claim Submitted" }),
+        description: t("claimSuccessBody", { fallback: "We will review your deposit shortly." }),
+      });
+      setShowClaimButtons(false);
+    } catch (e) {
+      toast({
+        variant: "danger",
+        title: "Error",
+        description: "Failed to submit claim. Please try again or contact support.",
+      });
+    } finally {
+      setIsClaiming(false);
+    }
+  };
 
   return (
     <Card className="grid gap-4 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -272,7 +307,28 @@ export function DepositPanel({ apiAssets }: DepositPanelProps) {
               <h3 className="text-base font-extrabold tracking-tight">
                 {t("stepSendHeading", { symbol: display.symbol })}
               </h3>
-              <CopyAddress address={address} shortenPreview={false} />
+              <CopyAddress address={address} shortenPreview={false} onCopy={() => setShowClaimButtons(true)} />
+              {showClaimButtons && (
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={handleClaim}
+                    disabled={isClaiming}
+                    className="group relative flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/22 bg-[var(--color-brand)] px-4 py-3 text-sm font-extrabold tracking-[-0.02em] shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_10px_32px_-12px_rgba(0,240,128,0.65),0_0_0_1px_rgba(0,0,0,0.35)] transition duration-300 ease-out hover:brightness-[1.07] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.42),0_14px_40px_-10px_rgba(0,240,128,0.75)] active:translate-y-px disabled:pointer-events-none disabled:opacity-50 [-webkit-text-stroke:0.4px_currentColor]"
+                    style={{ color: "var(--color-brand-dark, #031c16)" }}
+                  >
+                    {isClaiming ? t("submitting", { fallback: "Submitting..." }) : t("iHavePaid", { fallback: "I have paid" })}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowClaimButtons(false)}
+                    disabled={isClaiming}
+                    className="flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-extrabold text-white transition-all duration-300 hover:bg-white/10 hover:border-white/20 active:translate-y-px disabled:pointer-events-none disabled:opacity-50 [-webkit-text-stroke:0.4px_currentColor]"
+                  >
+                    {t("cancel", { fallback: "Cancel" })}
+                  </button>
+                </div>
+              )}
               <p className="rounded-xl bg-[var(--color-panel)] p-4 text-sm font-bold leading-relaxed text-[var(--color-text-muted)]">
                 {t("disclaimerTreasury")}
               </p>

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NEXT_PUBLIC_SITE_URL: z.string().url().default("https://crashflyy.com"),
+  NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
   NEXT_PUBLIC_SITE_NAME: z.string().min(1).default("CrashX"),
   NEXT_PUBLIC_SITE_TAGLINE: z
     .string()
@@ -11,9 +11,9 @@ const envSchema = z.object({
     .string()
     .min(1)
     .default(
-      "CrashX at crashx.cc — provably fair Crash, fast crypto withdrawals, clear limits. Play responsibly — 18+.",
+      "CrashX — provably fair Crash, fast crypto withdrawals, clear limits. Play responsibly — 18+.",
     ),
-  NEXT_PUBLIC_SUPPORT_EMAIL: z.string().email().default("support@crashx.cc"),
+  NEXT_PUBLIC_SUPPORT_EMAIL: z.string().email().default("support@crashx.com"),
   /** Laravel Sail default (port 80). Prefer 127.0.0.1 — `localhost` can hang on IPv6 vs Docker. */
   NEXT_PUBLIC_API_URL: z
     .string()
@@ -37,7 +37,7 @@ const envSchema = z.object({
       );
     }),
   NEXT_PUBLIC_PUSHER_APP_CLUSTER: z.string().default("mt1"),
-  NEXT_PUBLIC_WS_HOST: z.string().default("crashflyy.com"),
+  NEXT_PUBLIC_WS_HOST: z.string().default("localhost:3000"),
   NEXT_PUBLIC_WS_PORT: z.coerce.number().default(443),
   NEXT_PUBLIC_WSS_PORT: z.coerce.number().default(443),
   NEXT_PUBLIC_PUSHER_SCHEME: z.enum(["http", "https"]).default("https"),

@@ -7,10 +7,12 @@ import { shortenAddress } from "@/lib/format";
 export function CopyAddress({
   address,
   shortenPreview = true,
+  onCopy,
 }: {
   address: string;
   /** When false, show the full address in the row (still tap Copy for clipboard). */
   shortenPreview?: boolean;
+  onCopy?: () => void;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -19,6 +21,9 @@ export function CopyAddress({
       await navigator.clipboard.writeText(address);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
+      if (onCopy) {
+        window.setTimeout(() => onCopy(), 2000);
+      }
     } catch {
       // ignore
     }

@@ -346,7 +346,7 @@ export function BetCard({
       <Button
         block
         size="xl"
-        className="group h-14 gap-2.5"
+        className="group h-[4.25rem] sm:h-[4.5rem] text-[1.05rem] gap-2.5 animate-[betPulse_1.4s_ease-in-out_infinite] !bg-[var(--color-brand)] hover:!bg-[#00d673] !bg-none !text-[#04080f] !shadow-[0_0_24px_rgba(0,240,128,0.4)]"
         variant="primary"
         type="button"
         disabled={!canBet}
@@ -444,8 +444,12 @@ export function BetCard({
           0%, 100% { transform: translateZ(0) scale(1); box-shadow: 0 0 32px -12px rgba(255,110,44,0.55); }
           50% { transform: translateZ(0) scale(1.012); box-shadow: 0 0 52px -8px rgba(255,110,44,0.85); }
         }
+        @keyframes betPulse {
+          0%, 100% { transform: translateZ(0) scale(1); box-shadow: 0 0 32px -12px rgba(0,240,128,0.55); }
+          50% { transform: translateZ(0) scale(1.015); box-shadow: 0 0 52px -8px rgba(0,240,128,0.85); }
+        }
         @media (prefers-reduced-motion: reduce) {
-          [class*="cashPulse"] { animation: none !important; }
+          [class*="Pulse"] { animation: none !important; }
         }
       `}</style>
 
@@ -454,42 +458,11 @@ export function BetCard({
         aria-hidden
       />
 
-      {/* ── Header: title · wallet · sound ── */}
+      {/* ── Header: title ── */}
       <div className="flex items-center justify-between gap-2 px-3.5 pt-3 sm:px-5 sm:pt-4">
         <p className="truncate text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.18em] text-white/45">
           {t("betSidebarTitle")}
         </p>
-        <div className="flex shrink-0 items-center gap-2">
-          <span
-            className={cn(
-              "numeric rounded-lg px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-extrabold tabular-nums",
-              balance > 0
-                ? "bg-[var(--color-brand)]/[0.1] text-[var(--color-brand)]"
-                : "bg-amber-400/[0.12] text-amber-200",
-            )}
-          >
-            {balanceHint}
-          </span>
-          <button
-            type="button"
-            onClick={() => toggleSound()}
-            className={cn(
-              "grid size-7 sm:size-8 shrink-0 place-items-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/55",
-              soundOff
-                ? "bg-white/[0.04] text-white/40 hover:bg-white/[0.08]"
-                : "bg-[var(--color-brand)]/12 text-[var(--color-brand)] hover:bg-[var(--color-brand)]/18",
-            )}
-            aria-pressed={!soundOff}
-            aria-label={soundOff ? t("soundMutedAria") : t("soundOnAria")}
-            title={soundOff ? t("soundUnmute") : t("soundMute")}
-          >
-            {soundOff ? (
-              <VolumeX className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden />
-            ) : (
-              <Volume2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden />
-            )}
-          </button>
-        </div>
       </div>
 
       {/* ── Primary CTA at Top (visible right below rocket canvas) ── */}

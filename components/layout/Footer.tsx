@@ -132,18 +132,7 @@ export async function Footer() {
 
       <p className="text-xs font-medium leading-relaxed text-[var(--color-text-muted)]">
         © <span className="numeric">{year}</span> CrashX · All rights reserved ·{" "}
-        {tRoot("ageBanner")}{" "}
-        · crashx.cc is operated by TechSolutions Group N.V. under a Curaçao
-        gaming licence.{" "}
-        {tFooter("publisher.prefix")}{" "}
-        <a
-          href={PUBLISHER.url}
-          rel="noopener noreferrer"
-          className="font-semibold text-[var(--color-brand)] underline-offset-2 hover:underline"
-        >
-          {PUBLISHER.name}
-        </a>
-        {tFooter("publisher.suffix")}
+        {tRoot("ageBanner")}
       </p>
     </footer>
   );

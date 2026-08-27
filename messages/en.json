@@ -661,7 +661,12 @@
       "networkLabel": "Network",
       "noAssetsTitle": "Crypto deposits unavailable",
       "noAssetsBody": "No deposit addresses are configured for this tenant yet. Contact support if this persists.",
-      "missingAddressBody": "No deposit address is available for this selection. Try another currency or network, or contact support."
+      "missingAddressBody": "No deposit address is available for this selection. Try another currency or network, or contact support.",
+      "iHavePaid": "I have paid",
+      "cancel": "Cancel",
+      "submitting": "Submitting...",
+      "claimSuccessTitle": "Claim Submitted",
+      "claimSuccessBody": "We will review your deposit shortly."
     },
     "withdraw": {
       "metaTitle": "Withdraw",
